@@ -104,6 +104,7 @@ namespace System.Net
             // listens on all the interfaces if host name cannot be parsed by IPAddress.
             HttpEndPointListener epl = GetEPListener(lp.Host, lp.Port, listener, lp.Secure);
             epl.AddPrefix(lp, listener);
+            epl.Accept();
         }
 
         private static HttpEndPointListener GetEPListener(string host, int port, HttpListener listener, bool secure)

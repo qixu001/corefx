@@ -47,6 +47,7 @@ namespace System.Net
         private List<ListenerPrefix> _allPrefixes;       // host = '+'
         private X509Certificate _cert;
         private bool _secure;
+        private SocketAsyncEventArgs _args;
 
         public HttpEndPointListener(HttpListener listener, IPAddress addr, int port, bool secure)
         {
@@ -63,13 +64,17 @@ namespace System.Net
             _socket.Bind(_endpoint);
             _socket.Listen(500);
 
-            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-            args.UserToken = this;
-            args.Completed += OnAccept;
-            Accept(args);
+            _args = new SocketAsyncEventArgs();
+            _args.UserToken = this;
+            _args.Completed += OnAccept;
 
             _prefixes = new Dictionary<ListenerPrefix, HttpListener>();
             _unregisteredConnections = new Dictionary<HttpConnection, HttpConnection>();
+        }
+
+        public void Accept()
+        {
+            this.Accept(_args);
         }
 
         internal HttpListener Listener
