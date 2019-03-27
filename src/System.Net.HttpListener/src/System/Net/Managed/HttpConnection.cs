@@ -191,7 +191,7 @@ namespace System.Net
             try
             {
                 if (_reuses == 1)
-                    _timeout = 15000;
+                    _timeout = 15000 * 100;
                 _timer.Change(_timeout, Timeout.Infinite);
                 _stream.BeginRead(_buffer, 0, BufferSize, s_onreadCallback, this);
             }

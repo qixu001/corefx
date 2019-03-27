@@ -110,6 +110,9 @@ namespace System.Net
             HttpEndPointListener epl = (HttpEndPointListener)args.UserToken;
 
             Socket accepted = args.SocketError == SocketError.Success ? args.AcceptSocket : null;
+            accepted.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive,true);
+            accepted.LingerState = new LingerOption(false, 0);
+
             epl.Accept(args);
 
             if (accepted == null)
