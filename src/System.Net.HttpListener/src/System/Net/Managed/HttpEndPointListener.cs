@@ -110,8 +110,6 @@ namespace System.Net
             HttpEndPointListener epl = (HttpEndPointListener)args.UserToken;
 
             Socket accepted = args.SocketError == SocketError.Success ? args.AcceptSocket : null;
-            accepted.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive,true);
-            accepted.LingerState = new LingerOption(false, 0);
 
             epl.Accept(args);
 
@@ -124,6 +122,8 @@ namespace System.Net
                 return;
             }
 
+            accepted.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive,true);
+            accepted.LingerState = new LingerOption(false, 0);
             HttpConnection conn = new HttpConnection(accepted, epl, epl._secure, epl._cert);
             lock (epl._unregisteredConnections)
             {
